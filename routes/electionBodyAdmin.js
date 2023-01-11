@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router()
 const Verify = require("../routes/verifytoken")
-const ElectionBodyAdmin = require('../models/electionBodyAdmin')
-require('dotenv').config();
+const {superAdminRoutesOnly} = require('../middleware/authPage')
 
 const {
   createElectionBodyAdmin,
@@ -11,10 +10,10 @@ const {
   updateelectionBodyAdmin
 } = require('../controller/electionBodyAdmin')
 
-router.post('/createElectionBodyAdmin',Verify,createElectionBodyAdmin)
-router.delete('/:id/deleteElectionBodyAdmin',Verify,deleteElectionBodyAdmin)
-router.get('/viewelectionbodyAdmin', Verify,viewelectionbodyAdmin)
-router.put('/:id/updateelectionBodyAdmin',Verify,updateelectionBodyAdmin)
+router.post('/createElectionBodyAdmin',Verify,superAdminRoutesOnly, createElectionBodyAdmin)
+router.delete('/:id/deleteElectionBodyAdmin',Verify,superAdminRoutesOnly,deleteElectionBodyAdmin)
+router.get('/viewelectionbodyAdmin', Verify,superAdminRoutesOnly,viewelectionbodyAdmin)
+router.put('/:id/updateelectionBodyAdmin',Verify,superAdminRoutesOnly,updateelectionBodyAdmin)
 
 
 

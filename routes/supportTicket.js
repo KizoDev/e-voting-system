@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router()
-const SupportTicket = require('../models/support ticket')
-const authPage = require('../middleware/authPage')
 const Verify = require('../routes/verifytoken')
+const {superAdminAndAdminRoutesOnly} = require('../middleware/authPage')
 
 const {
   createSupportTicket,
@@ -13,7 +12,7 @@ const {
 } = require('../controller/supportTicket')
 
 router.post('/createSupportTicket',Verify,createSupportTicket)
-router.delete('/:id/deleteSupportTicket',Verify,deleteSupportTicket)
+router.delete('/:id/deleteSupportTicket',Verify,superAdminAndAdminRoutesOnly, deleteSupportTicket)
 router.get('/viewSupportTicket', Verify, viewSupportTicket)
 router.put('/:id/updateSupportTicket',Verify,updateSupportTicket)
 

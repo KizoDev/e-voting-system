@@ -1,6 +1,7 @@
 const express = require('express');
 const Election = require('../models/election')
 const ElectionBody = require('../models/electionBody')
+const ElectionBodyAdmin = require('../models/electionBodyAdmin')
 require('dotenv').config();
 const authPage = require('../middleware/authPage')
 const Verify = require('../routes/verifytoken')
@@ -18,7 +19,14 @@ const createElection = async (req, res) => {
     });
   }
   //check if the user trying to create election is a superadmin or an admin of the election body
-
+const user = await ElectionBodyAdmin.findOne({electionBodyId : electionBodyId})
+if(user == null) {
+  return res.json({
+    status: 400,
+    message: "user is not allowed to create election",
+    successful: false,
+  });
+}
  // register new user
  const election = new Election({
     name, 
@@ -41,6 +49,7 @@ const createElection = async (req, res) => {
 }
 
 const deleteElection = async (req, res) =>  {
+  // checking if the user trying to delete election is an election body admin
   const { id: electionId } = req.params
   const deleteElection = await Election.findOneAndDelete({ _id: electionId })
   if (!deleteElection) {

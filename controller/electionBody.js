@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router()
 const ElectionBody = require('../models/electionBody')
 const Verify = require('../routes/verifytoken')
+const ElectionBodyAdmin = require('../models/electionBodyAdmin');
+const User = require('../models/user');
 
 
 const createElectionBody = async (req, res) => {
   const {name, address} = req.body
  // register new user
+
  const electionBody = new ElectionBody({
     name, 
     address,

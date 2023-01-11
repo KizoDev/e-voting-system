@@ -17,7 +17,8 @@
     "express": "^4.17.1",
     "init": "^0.1.2",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.10"
+    "mongoose": "^5.11.10",
+    "nodemailer": "^6.8.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

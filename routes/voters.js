@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router()
-const Voter = require('../models/voters')
-const authPage = require('../middleware/authPage')
 const Verify = require('../routes/verifytoken')
+const {superAdminAndAdminRoutesOnly} = require('../middleware/authPage')
 
 const {
   createvoter,
@@ -12,9 +11,9 @@ const {
 } = require('../controller/voter')
 
 router.post('/createvoter',Verify,createvoter)
-router.delete('/:id/deleteVoter',Verify,deleteVoter)
-router.get('/viewVoter', Verify,viewVoter)
-router.put('/:id/updateVoter',Verify,updateVoter)
+router.delete('/:id/deleteVoter',Verify,superAdminAndAdminRoutesOnly, deleteVoter)
+router.get('/viewVoter', Verify,superAdminAndAdminRoutesOnly, viewVoter)
+router.put('/:id/updateVoter',Verify,superAdminAndAdminRoutesOnly, updateVoter)
 
 
   module.exports = router

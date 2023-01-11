@@ -3,6 +3,7 @@ const Vote = require('../models/votes')
 const Voter = require('../models/voters')
 const authPage = require('../middleware/authPage')
 const Verify = require('../routes/verifytoken')
+const ElectionBodyAdmin = require('../models/electionBodyAdmin')
 
 const createvote = async (req, res) => {
   const {electionCandidateId, electionId} = req.body
@@ -36,6 +37,15 @@ const createvote = async (req, res) => {
 
 const deleteVote = async (req, res) =>  {
   const { id: voteId } = req.params
+
+  // const user = await ElectionBodyAdmin.findOne({electoralBodyAdminId: req.user._id })
+  // if(user == null) {
+  //   return res.json({
+  //     status: 400,
+  //     message: "You are not allowed to delete vote",
+  //     successful: false,
+  //   });
+  // }
   const vote = await Vote.findOneAndDelete({ _id: voteId })
   if (!vote) {
     return res.json({
@@ -54,7 +64,6 @@ const deleteVote = async (req, res) =>  {
 }
 
 const viewVote = async (req, res) => {         
-
 const vote = await Vote.aggregate([
   {
          $lookup:{
@@ -90,7 +99,14 @@ const vote = await Vote.aggregate([
 
 const updateVote = async (req, res) => {
   const { id: voteId } = req.params
-
+  // const user = await ElectionBodyAdmin.findOne({electoralBodyAdminId: req.user._id })
+  // if(user == null) {
+  //   return res.json({
+  //     status: 400,
+  //     message: "You are not allowed to update vote",
+  //     successful: false,
+  //   });
+  // }
   const vote = await Vote.findOneAndUpdate({ _id: voteId }, req.body, {
     new: true,
     runValidators: true,

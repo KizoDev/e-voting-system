@@ -1,8 +1,5 @@
 const express = require('express');
-const router = express.Router()
 const SupportTicket = require('../models/support ticket')
-const authPage = require('../middleware/authPage')
-const Verify = require('../routes/verifytoken')
 
 
 const createSupportTicket = async (req, res) => {

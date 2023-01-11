@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const ElectionCandidate = require('../models/electionCandidates')
-const Verify = require('../routes/verifytoken')
+const ElectionBodyAdmin = require('../models/electionBodyAdmin');
 
 const createElectionCandidate = async (req, res) => {
 const electionId = req.body.electionId

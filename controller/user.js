@@ -4,9 +4,33 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 require('dotenv').config();
-
+const nodemailer = require('nodemailer')
 const {signupValidation,
     signinValidation} = require('../validation')
+
+    // let transporter = nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   port: 465,
+    //   secure: false, // true for 465, false for other ports
+    //   auth: {
+    //     user: testAccount.user, // generated ethereal user
+    //     pass: testAccount.pass, // generated ethereal password
+    //   },
+    // })
+
+let mailTransporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth : {
+    user : 'kingsleyarizona39@gmail.com',
+    pass : "Arizona391"
+  },
+  t1s:{
+    rejectUnauthorized : false
+  }
+})
+
 
 const signupUser = async (req, res) => {
   const {name, phone, email, address, age, ward, pollingunit, role} = req.body
@@ -29,7 +53,7 @@ const signupUser = async (req, res) => {
  // const salt =  await bcrypt.gensalt(10)
  const hashpassword = await bcrypt.hash(req.body.password, 10)
  // register new user
- const hashedpassword = bcrypt.hash(req.body.password, 12)
+ //const hashedpassword = bcrypt.hash(req.body.password, 12)
       const user = new User({
         name, 
         phone, 
@@ -43,7 +67,23 @@ const signupUser = async (req, res) => {
       })
   
    await user.save()
-   .select('+password');
+
+let mailOption = {
+  from: "kingsleyarizona39@gmail.com",
+  to: user.email,
+  subject: "testing election email",
+  html: `<h2> ${user.name}! thanks for registering for this election </h2>`
+}
+// sending email
+mailTransporter.sendMail(mailOption, function(error, info) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('email is sent to ur gmail account');
+  }
+})
+
+  // .select('+password');
    const userResponse = {
       _id:user._id,
       name:user.name,
@@ -69,7 +109,7 @@ const signinUser = async (req, res) => {
   })
   // checking if the email doent  exist
   const user = await User.findOne({email:req.body.email})
-  // .select('+password')
+  .select('+password')
   if(!user) return res.json({
   status: 400,
   message: ('email or password is wrong'),
@@ -80,10 +120,11 @@ const signinUser = async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password)
   if(!validPass) return res.json({
     status: 400,
-    message: ('invalid password '),
+    message: ('invalid password or email'),
     successfull:false,
     data:null
-  })
+  });
+  user.password = null;
   //create and asign token
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
   
@@ -96,9 +137,63 @@ const signinUser = async (req, res) => {
     })
 
 }
+ 
+
+const getAllUser = async (req, res) => {
+ 
+    const user = await User.aggregate([
+       {
+              $lookup:{
+                  from:"users",
+                  localField:"userId",
+                  foreignField:"_id",
+                  as:"users",
+              },
+          },
+          {
+            $unwind:{
+              path: "$users",
+            preserveNullAndEmptyArrays: true,
+            }
+          },
+          {
+              $lookup:{
+                  from:"votes",
+                  localField:"_id",
+                  foreignField:"userId",
+                  as:"votes"
+              },
+          },
+          {
+            $unwind:{
+              path: "$votes",
+            preserveNullAndEmptyArrays: true,
+            }
+          },
+         // { $addFields: {comment_count: { $size: "$comments" } } }
+     ])
+     .exec()
+      if (!user) {
+          return res.json({
+          status:401,
+          massage:' no post to display' ,
+          successfull:false,
+          data:null
+          })
+      }
+      return res.json({
+      status:200,
+      massage: 'successfull posts',
+      successfull:true,
+      users:user
+       })
+}
+  
+
 
 module.exports = {
   signupUser,
-  signinUser
+  signinUser,
+  getAllUser
    }
 

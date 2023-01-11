@@ -2,9 +2,8 @@ const express = require('express');
 const Voter = require('../models/voters')
 const authPage = require('../middleware/authPage')
 const Verify = require('../routes/verifytoken')
-
+const ElectionBodyAdmin = require('../models/electionBodyAdmin');
 const createvoter = async (req, res) => {
-  //const {userId, electionId} = req.body
  // register new user
  const voter = new Voter({
 
@@ -95,7 +94,14 @@ const voter = await Voter.aggregate([
 
  const updateVoter = async (req, res) => {
   const { id: voterId } = req.params
-
+  const user = await ElectionBodyAdmin.findOne({_id: req.user._id })
+  if(user == null) {
+    return res.json({
+      status: 400,
+      message: "You are not allowed to update voter",
+      successful: false,
+    });
+  }
   const voter = await Voter.findOneAndUpdate({ _id: voterId }, req.body, {
     new: true,
     runValidators: true,
