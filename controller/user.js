@@ -19,12 +19,12 @@ const {signupValidation,
     // })
 
 let mailTransporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "premium108.web-hosting.com",
   port: 465,
   secure: true,
   auth : {
-    user : 'kingsleyarizona39@gmail.com',
-    pass : "Arizona391"
+    user : 'nesitest@andyke.net',
+    pass : "ikechukwuapeh"
   },
   t1s:{
     rejectUnauthorized : false
@@ -69,10 +69,11 @@ const signupUser = async (req, res) => {
    await user.save()
 
 let mailOption = {
-  from: "kingsleyarizona39@gmail.com",
+  from: "nesitest@andyke.net",
   to: user.email,
   subject: "testing election email",
-  html: `<h2> ${user.name}! thanks for registering for this election </h2>`
+  html: `<h2>hi ${user.name}! thanks for registering for this election,
+   try and register as a voter to be able to vote in the coming election, have a nice day </h2>`
 }
 // sending email
 mailTransporter.sendMail(mailOption, function(error, info) {
