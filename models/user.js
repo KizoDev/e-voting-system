@@ -1,3 +1,4 @@
+const string = require('@hapi/joi/lib/types/string')
 const mongoose = require('mongoose')
 const voters = require('./voters')
 
@@ -14,6 +15,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: true,
   },
+  resetToken: String,
+  expireToken:Date,
   ward: {
     type: String,
     default: true,
@@ -25,7 +28,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     default: true,
-    select:false
+    ///select:false
   },
   address: {
     type: String,
@@ -33,6 +36,10 @@ const userSchema = new mongoose.Schema({
   },
   age: {
     type: Number,
+    default: true,
+  },
+  avatar:{
+    type: String,
     default: true,
   },
   status: {

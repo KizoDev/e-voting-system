@@ -8,15 +8,6 @@ const nodemailer = require('nodemailer')
 const {signupValidation,
     signinValidation} = require('../validation')
 
-    // let transporter = nodemailer.createTransport({
-    //   host: "smtp.gmail.com",
-    //   port: 465,
-    //   secure: false, // true for 465, false for other ports
-    //   auth: {
-    //     user: testAccount.user, // generated ethereal user
-    //     pass: testAccount.pass, // generated ethereal password
-    //   },
-    // })
 
 let mailTransporter = nodemailer.createTransport({
   host: "premium108.web-hosting.com",
@@ -33,7 +24,7 @@ let mailTransporter = nodemailer.createTransport({
 
 
 const signupUser = async (req, res) => {
-  const {name, phone, email, address, age, ward, pollingunit, role} = req.body
+  const {name, phone, email, address, age, ward, pollingunit, role, avatar} = req.body
       // validation of data before user
       const {error} = signupValidation(req.body);
       if(error) return res.json({
@@ -49,7 +40,8 @@ const signupUser = async (req, res) => {
    successfull:false,
    data:null
  })
- //hashpassword
+
+
  // const salt =  await bcrypt.gensalt(10)
  const hashpassword = await bcrypt.hash(req.body.password, 10)
  // register new user
@@ -64,6 +56,7 @@ const signupUser = async (req, res) => {
         ward, 
         pollingunit, 
         role,
+        avatar
       })
   
    await user.save()

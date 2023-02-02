@@ -115,7 +115,7 @@ const updateElection = async (req, res) => {
     return res.json({
       status: 404,
       message: 'No election with id : ${electionId}',
-      successfull:true,
+      successfull:false,
       deleteElection:null
     })
   }

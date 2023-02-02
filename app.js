@@ -16,6 +16,10 @@ const voteRouter = require('./routes/votes')
 const umpireRouter = require('./routes/umpire')
 const supportTicketrouter = require('./routes/supportTicket')
 const electionCandidateRouter = require('./routes/electionCandidates')
+const photoRouter = require('./routes/profilePicture')
+const resetPasswordRouter = require('./routes/resetPassword')
+const addNewPasswordRouter = require('./routes/addNewPassword')
+
 
 
 
@@ -33,6 +37,9 @@ app.use('/', voteRouter)
 app.use('/', umpireRouter)
 app.use('/', supportTicketrouter)
 app.use('/', electionCandidateRouter)
+app.use('/', photoRouter)
+app.use('/', resetPasswordRouter)
+app.use('/', addNewPasswordRouter)
 
 
 
